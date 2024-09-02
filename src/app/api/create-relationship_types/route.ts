@@ -4,7 +4,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
  
 export async function GET(req: any, res: any) {
+
+
+
   try {
+    // drop table if it exists
+    await sql`DROP TABLE IF EXISTS relationship_types;`;
     // create table
     const result =
       await sql`CREATE TABLE relationship_types (
