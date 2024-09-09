@@ -1,9 +1,7 @@
-import type { Metadata } from "next";
+import './globals.css';
+import { Providers } from '../components/Providers'
 
-export const metadata: Metadata = {
-  title: "My Next.js App",
-  description: "A blank Next.js project",
-};
+
 
 export default function RootLayout({
   children,
@@ -11,8 +9,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className="dark">
+      <body>
+      <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

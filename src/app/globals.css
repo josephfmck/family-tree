@@ -1,0 +1,16 @@
+:root {
+    --background: white;
+    --foreground: black;
+  }
+  
+  .dark {
+    --background: #121212;
+    --foreground: #ffffff;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  
+  /* Add any other global styles here */
