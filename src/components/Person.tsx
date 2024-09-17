@@ -1,22 +1,8 @@
 import React from 'react';
 
-interface PersonProps {
-  id: number;
-  first_name: string;
-  last_name: string;
-  x: number;
-  y: number;
-  isYou?: boolean;
-  onDelete: (id: number) => void;
-}
 
-export default function Person({ id, first_name, last_name, x, y, isYou, onDelete }: PersonProps) {
-  const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete ${first_name} ${last_name}?`)) {
-      onDelete(id);
-    }
-  };
-
+export default function Person({ id, first_name, last_name, x, y, isYou, }: any) {
+  
   return (
     <div 
       style={{
@@ -42,7 +28,6 @@ export default function Person({ id, first_name, last_name, x, y, isYou, onDelet
       {first_name} {last_name}
       {!isYou && (
         <button 
-          onClick={handleDelete}
           style={{
             position: 'absolute',
             top: '5px',

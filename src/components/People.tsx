@@ -3,39 +3,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+
+import { setPersons } from '../store/slices/personsSlice';
+
 import Person from './Person';
 
-interface PersonType {
-  id: number;
-  first_name: string;
-  last_name: string;
-}
-
-async function fetchPersons() {
-  const response = await fetch('/api/persons/read');
-  if (!response.ok) throw new Error('Failed to fetch persons');
-  return response.json();
-}
+// async function fetchPersons() {
+//   const response = await fetch('/api/persons/read');
+//   if (!response.ok) throw new Error('Failed to fetch persons');
+//   return response.json();
+// }
 
 export default function People() {
-  const [persons, setPersons] = useState<PersonType[]>([]);
-
-  //! hooks
-  useEffect(() => {
-    fetchPersons().then(setPersons).catch(e => console.error('Error fetching persons:', e));
-  }, []);
-
-  //! event handlers
-  const handleDelete = async (id: number) => {
-    try {
-      const response = await fetch(`/api/persons/delete/${id}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error('Failed to delete person');
-      setPersons(persons.filter(person => person.id !== id));
-    } catch (error) {
-      console.error('Error deleting person:', error);
-    }
-  };
-
+  const dispatch = useDispatch();
+  const persons = useSelector((state: RootState) => state.persons);
+  
 
   //! positioning logic
   const centerX = 400; // Adjust based on your layout
@@ -68,7 +52,7 @@ export default function People() {
             x = centerX + radius * Math.cos(angle);
             y = centerY - radius * Math.sin(angle);
           }
-          return <Person key={person.id} {...person} x={x} y={y} isYou={index === 0} onDelete={handleDelete} />;
+          return <Person key={person.id} {...person} x={x} y={y} isYou={index === 0} />;
         })}
       </div>
     </div>

@@ -1,51 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAppData } from '../hooks/useAppData';
+
+
+//! components
 import People from '../components/People';
 import RelationshipForm from '../components/RelationshipForm';
 import Relationships from '../components/Relationships';
+//! rtk
+import { useGetRelationshipsQuery } from '@/store/api/relationshipsApi';
+import { setRelationships } from '@/store/slices/relationshipsSlice';
+// TODO: fetch all 3 on page load. 
+// TODO: set relationships rtk to the fetched relationships 
 
-interface Person {
-    id: number;
-    first_name: string;
-    last_name: string;
-}
-
-interface RelationshipType {
-    id: number;
-    relationship: string;
-}
-
-async function fetchPersons() {
-  const response = await fetch('/api/persons/read');
-  if (!response.ok) throw new Error('Failed to fetch persons');
-  return response.json();
-}
-
-async function fetchRelationshipTypes() {
-    const response = await fetch('/api/relationship-types/read');
-    if (!response.ok) throw new Error('Failed to fetch persons');
-    return response.json();
-}
 
 export default function Home() {
-  const [persons, setPersons] = useState<Person[]>([]);
-  const [relationshipTypes, setRelationshipTypes] = useState<RelationshipType[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  //* fetches all 3 and sets to rtk once?
+  const { isLoading, error } = useAppData();
 
-  const [selectedPerson1, setSelectedPerson1] = useState<number | ''>('');
-  const [selectedPerson2, setSelectedPerson2] = useState<number | ''>('');
-  const [selectedRelationship, setSelectedRelationship] = useState<number | ''>('');
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.toString()}</div>;  
 
-
-  useEffect(() => {
-    fetchPersons().then(setPersons).catch(e => console.error('Error fetching persons:', e));
-    fetchRelationshipTypes()
-      .then(setRelationshipTypes)
-      .catch(e => {
-        console.error('Error fetching relationship types:', e);
-      });
-  }, []);
 
 
   return (
