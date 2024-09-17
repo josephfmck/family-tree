@@ -8,7 +8,7 @@ import { useAppData } from '../hooks/useAppData';
 //! components
 import People from '../components/People';
 import RelationshipForm from '../components/RelationshipForm';
-import Relationships from '../components/Relationships';
+import RelationshipsList from '../components/RelationshipsList';
 //! rtk
 import { useGetRelationshipsQuery } from '@/store/api/relationshipsApi';
 import { setRelationships } from '@/store/slices/relationshipsSlice';
@@ -29,7 +29,7 @@ export default function Home() {
     <div>
 
 {/* // TODO: RTK for relationships, when adding a new relationship with <RelationshipForm>. repull and set the relationships rtk which is then rendered out in <relationships> */}
-    <Relationships/>
+    <RelationshipsList/>
     <RelationshipForm />
     <People />
   </div>

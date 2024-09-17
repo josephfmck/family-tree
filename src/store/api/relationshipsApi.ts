@@ -12,8 +12,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 // ! back end ids for unique sql relationships
 interface RelationshipIds {
-  person_1_id: string;
-  person_2_id: string;
+  person1Id: string;
+  person2Id: string;
   relationshipTypeId: string;
 }
 

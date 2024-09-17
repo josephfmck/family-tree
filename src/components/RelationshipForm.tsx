@@ -21,10 +21,15 @@ export default function RelationshipForm() {
         // ! Create relationship with IDs
         const handleSubmit = async (e: React.FormEvent) => {
           e.preventDefault();
+          console.log(person1, person2, relationshipTypeId);
+          if (!person1 || !person2 || !relationshipTypeId) {
+            console.error('All fields are required');
+            return;
+          }
           try {
               await addRelationship({
-                  person_1_id: person1,
-                  person_2_id: person2,
+                  person1Id: person1,
+                  person2Id: person2,
                   relationshipTypeId: relationshipTypeId
               }).unwrap();
               // Clear form on success
