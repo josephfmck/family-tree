@@ -11,12 +11,24 @@ interface RelationshipNames {
 }
 
 //! BACKEND
+
+// tagTypes are accessed from all api slices - relationships/relationshipNames are using this tagType 
+// provide the tagType, when the form was created the tagType was invalidated and triggers this
+// refetches the data because it was invalidated earlier when we added new relationship
 export const relationshipNamesApi = createApi({
   reducerPath: 'relationshipNamesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: '/api/',
+    prepareHeaders: (headers) => {
+      headers.set('Cache-Control', 'no-store');
+      return headers;
+    },
+  }),
+  tagTypes: ['RelationshipNames'],
   endpoints: (builder) => ({
     getRelationshipNames: builder.query<RelationshipNames[], void>({
       query: () => 'relationshipNames/read',
+      providesTags: ['RelationshipNames'],
     }),
   }),
 });

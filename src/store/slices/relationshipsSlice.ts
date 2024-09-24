@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface RelationshipIds {
-  person_1_id: string;
-  person_2_id: string;
+  person1Id: string;
+  person2Id: string;
   relationshipTypeId: string;
 }
 

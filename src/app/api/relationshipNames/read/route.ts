@@ -1,9 +1,11 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
+import { pool } from '@/lib/db'; // Import the pool
+
 
 export async function GET() {
     try {
-        const result = await sql`
+        const result = await pool.query(`
             SELECT 
                 r.id,
                 p1.first_name AS person1_first_name,
@@ -19,7 +21,7 @@ export async function GET() {
                 persons p2 ON r.person_id_2 = p2.id
             JOIN 
                 relationship_types rt ON r.relationship_type_id = rt.id
-        `;
+        `);
         return NextResponse.json(result.rows);
     } catch (error) {
         console.error('Error fetching relationships:', error);

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 // import { addRelationship } from '../store/slices/relationshipsSlice';
 import { useAddRelationshipMutation } from '@/store/api/relationshipsApi';
+import { useGetRelationshipNamesQuery } from '@/store/api/relationshipNamesApi';
 
 export default function RelationshipForm() {
     const dispatch = useDispatch();
@@ -17,30 +18,35 @@ export default function RelationshipForm() {
     const [person2, setPerson2] = useState<string>('');
     const [relationshipTypeId, setRelationshipTypeId] = useState<string>('');
 
+    const { refetch } = useGetRelationshipNamesQuery();
 
-        // ! Create relationship with IDs
-        const handleSubmit = async (e: React.FormEvent) => {
-          e.preventDefault();
-          console.log(person1, person2, relationshipTypeId);
-          if (!person1 || !person2 || !relationshipTypeId) {
-            console.error('All fields are required');
-            return;
-          }
-          try {
-              await addRelationship({
-                  person1Id: person1,
-                  person2Id: person2,
-                  relationshipTypeId: relationshipTypeId
-              }).unwrap();
-              // Clear form on success
-              setPerson1('');
-              setPerson2('');
-              setRelationshipTypeId('');
-          } catch (err) {
-              // Error is handled by RTK Query
-              console.error('Failed to add relationship:', err);
-          }
-      };
+    // ! Create relationship with IDs
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      console.log(person1, person2, relationshipTypeId);
+      if (!person1 || !person2 || !relationshipTypeId) {
+        console.error('All fields are required');
+        return;
+      }
+      try {
+        await addRelationship({
+          person1Id: person1,
+          person2Id: person2,
+          relationshipTypeId: relationshipTypeId
+        }).unwrap();
+
+        // Trigger manual refetch
+        refetch();
+
+        // Clear form on success
+        setPerson1('');
+        setPerson2('');
+        setRelationshipTypeId('');
+      } catch (err) {
+        // Error is handled by RTK Query
+        console.error('Failed to add relationship:', err);
+      }
+    };
 
   return (
     <form onSubmit={handleSubmit}>

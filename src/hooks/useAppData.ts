@@ -23,26 +23,50 @@ export const useAppData = () => {
     data: relationships, 
     error: relationshipsError, 
     isLoading: isLoadingRelationships 
-  } = useGetRelationshipsQuery();
+  } = useGetRelationshipsQuery(
+    undefined, {
+      refetchOnMountOrArgChange: true, // refetches whenever the component is mounted
+      refetchOnFocus: true,            // refetches when the window regains focus
+      refetchOnReconnect: true,        // refetches when the network reconnects    
+  }
+);
 
   // ! these are names of the relationships
   const { 
     data: relationshipNames, 
     error: relationshipNamesError, 
     isLoading: isLoadingRelationshipNames 
-  } = useGetRelationshipNamesQuery();
+  } = useGetRelationshipNamesQuery(
+    undefined, {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,        // refetches when the network reconnects    
+    }
+  );
 
   const { 
     data: persons, 
     error: personsError, 
     isLoading: isLoadingPersons 
-  } = useGetPersonsQuery();
+  } = useGetPersonsQuery(
+    undefined, {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,        // refetches when the network reconnects    
+    }
+  );
 
   const { 
     data: relationshipTypes, 
     error: relationshipTypesError, 
     isLoading: isLoadingRelationshipTypes 
-  } = useGetRelationshipTypesQuery();
+  } = useGetRelationshipTypesQuery(
+    undefined, {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,        // refetches when the network reconnects    
+    }
+  );
 
   // dispatch to the front end rtk
   useEffect(() => {

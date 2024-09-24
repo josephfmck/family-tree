@@ -43,6 +43,7 @@ export default function People() {
         height: '600px'
       }}>
         {persons.map((person, index) => {
+          // postioning
           let x, y;
           if (index === 0) {
             x = centerX;

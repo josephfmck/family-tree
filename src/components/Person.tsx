@@ -26,6 +26,9 @@ export default function Person({ id, first_name, last_name, x, y, isYou, }: any)
     >
       {isYou && <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>You</div>}
       {first_name} {last_name}
+     
+     
+     {/* Delete button for everyone except user */}
       {!isYou && (
         <button 
           style={{
