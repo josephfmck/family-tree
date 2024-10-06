@@ -30,9 +30,9 @@ export default function RelationshipForm() {
       }
       try {
         await addRelationship({
-          person1Id: person1,
-          person2Id: person2,
-          relationshipTypeId: relationshipTypeId
+          person_id_1: person1,
+          person_id_2: person2,
+          relationship_type_id: relationshipTypeId
         }).unwrap();
 
         // Trigger manual refetch

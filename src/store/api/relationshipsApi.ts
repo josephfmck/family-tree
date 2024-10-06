@@ -17,6 +17,10 @@ interface RelationshipIds {
   person_id_2: string;
   relationship_type_id: string;
 }
+// actual id of created relationship
+interface RelationshipId {
+  id: string;
+}
 
 //! BACKEND
 export const relationshipsApi = createApi({
@@ -46,7 +50,14 @@ export const relationshipsApi = createApi({
       }),
       invalidatesTags: ['RelationshipNames'],
     }),
+    deleteRelationship: builder.mutation<void, RelationshipId>({
+      query: ({ id }) => ({
+        url: `relationships/delete/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['RelationshipNames'],
+    }),
   }),
 });
 
-export const { useGetRelationshipsQuery, useAddRelationshipMutation } = relationshipsApi;
+export const { useGetRelationshipsQuery, useAddRelationshipMutation, useDeleteRelationshipMutation } = relationshipsApi;
