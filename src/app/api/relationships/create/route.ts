@@ -1,17 +1,17 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // ! CREATE ROW
 
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     // ! relationship data
-    const { person1Id, person2Id, relationshipTypeId } = await req.json();
-    console.log(person1Id, person2Id, relationshipTypeId);
+    const { person_id_1, person_id_2, relationship_type_id } = await req.json();
+    console.log(person_id_1, person_id_2, relationship_type_id);
 
     // Validate input
-    if (!person1Id || !person2Id || !relationshipTypeId) {
+    if (!person_id_1 || !person_id_2 || !relationship_type_id) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     // TODO: understand approach to keep data correct and unique
     const result = await sql`
       INSERT INTO relationships (person_id_1, person_id_2, relationship_type_id)
-      VALUES (${person1Id}, ${person2Id}, ${relationshipTypeId})
+      VALUES (${person_id_1}, ${person_id_2}, ${relationship_type_id})
       RETURNING id, person_id_1, person_id_2, relationship_type_id
       `;
 

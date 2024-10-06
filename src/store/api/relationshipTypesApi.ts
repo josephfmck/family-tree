@@ -5,6 +5,10 @@ interface RelationshipType {
   relationship: string;
 }
 
+interface RelationshipTypeId {
+  id: string;
+}
+
 export const relationshipTypesApi = createApi({
   reducerPath: 'relationshipTypesApi',
   baseQuery: fetchBaseQuery({ 
@@ -18,16 +22,24 @@ export const relationshipTypesApi = createApi({
   endpoints: (builder) => ({
     getRelationshipTypes: builder.query<RelationshipType[], void>({
       query: () => 'relationship-types/read',
+      providesTags: ['RelationshipTypes'],
     }),
-    addRelationshipType: builder.mutation({
+    addRelationshipType: builder.mutation<RelationshipType, Partial<RelationshipType>>({
       query: (body) => ({
-        url: 'relationshipTypes/create',
+        url: 'relationship-types/create',
         method: 'POST',
         body,
       }),
       invalidatesTags: ['RelationshipTypes'], // Invalidates cache when a person is deleted
     }),
+    deleteRelationshipType: builder.mutation<void, RelationshipTypeId>({
+      query: ({ id }) => ({
+        url: `relationship-types/delete/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['RelationshipTypes'],
+    }),
   }),
 });
 
-export const { useGetRelationshipTypesQuery, useAddRelationshipTypeMutation } = relationshipTypesApi;
+export const { useGetRelationshipTypesQuery, useAddRelationshipTypeMutation, useDeleteRelationshipTypeMutation } = relationshipTypesApi;

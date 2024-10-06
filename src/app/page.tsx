@@ -17,6 +17,8 @@ import RelationshipTypes from '@/components/RelationshipTypesList';
 import RelationshipTypesList from '@/components/RelationshipTypesList';
 import RelationshipTypesForm from '@/components/RelationshipTypesForm';
 import RelationshipDeleteForm from '@/components/RelationshipDeleteForm';
+import PersonDeleteForm from '@/components/PersonDeleteForm';
+import RelationshipTypeDeleteForm from '@/components/RelationshipTypeDeleteForm';
 // TODO: fetch all 3 on page load. 
 // TODO: set relationships rtk to the fetched relationships 
 
@@ -41,9 +43,11 @@ export default function Home() {
     </div>
     <div style={{ display: "flex" }}>
     <RelationshipTypesForm />
+    <RelationshipTypeDeleteForm/>
     <RelationshipTypesList />
     </div>
     <PersonForm />
+    <PersonDeleteForm />
     <People />
   </div>
   );

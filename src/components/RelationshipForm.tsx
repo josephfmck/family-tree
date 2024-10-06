@@ -20,6 +20,26 @@ export default function RelationshipForm() {
 
     const { refetch } = useGetRelationshipNamesQuery();
 
+    // Helper function to add reciprocal relationships
+    const addReciprocalRelationship = async (
+      reciprocalTypeName: string,
+      personA: string,
+      personB: string
+    ) => {
+      const reciprocalRelationshipType = relationshipTypes.find(
+        (type: any) => type.relationship === reciprocalTypeName
+      );
+      if (reciprocalRelationshipType) {
+        await addRelationship({
+          person_id_1: personA,
+          person_id_2: personB,
+          relationship_type_id: reciprocalRelationshipType.id,
+        }).unwrap();
+      } else {
+        console.error(`${reciprocalTypeName} relationship type not found`);
+      }
+    };
+
     // ! Create relationship with IDs
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -34,6 +54,28 @@ export default function RelationshipForm() {
           person_id_2: person2,
           relationship_type_id: relationshipTypeId
         }).unwrap();
+
+      // Find the selected relationship type
+      const selectedRelationshipType = relationshipTypes.find(
+        (type: any) => type.id === relationshipTypeId
+      );
+
+       // Use helper function for reciprocal relationships
+       if (selectedRelationshipType) {
+        const relationshipType = selectedRelationshipType.relationship;
+
+        // TODO: more - spouse, 
+        if (relationshipType === 'Child') {
+          await addReciprocalRelationship('Parent', person2, person1);
+        } else if (relationshipType === 'Parent') {
+          await addReciprocalRelationship('Child', person2, person1);
+        } else if (relationshipType === 'Sibling') {
+          await addReciprocalRelationship('Sibling', person2, person1);
+        } else if (relationshipType === 'Spouse') {
+          await addReciprocalRelationship('Spouse', person2, person1);
+        }
+        // Add more reciprocal relationships as needed
+      }
 
         // Trigger manual refetch
         refetch();
@@ -99,7 +141,9 @@ export default function RelationshipForm() {
         ))}
       </select>
     </div>
-    <button type="submit">Add Relationship</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Adding...' : 'Add Relationship'}
+      </button>
   </form>
   );
 }

@@ -41,8 +41,8 @@ export default function RelationshipTypesForm() {
   
   return (
     <>
-    <h1>Add Relationship Type</h1>
     <form onSubmit={handleSubmit}>
+    <h1>Add Relationship Type</h1>
         <label htmlFor="relationshipType">Relationship Type:</label><br />
         <input
           type="text"

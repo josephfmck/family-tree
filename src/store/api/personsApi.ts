@@ -6,6 +6,10 @@ interface Person {
     last_name: string;
 }
 
+interface PersonId {
+  id: string;
+}
+
 export const personsApi = createApi({
   reducerPath: 'personsApi',
   baseQuery: fetchBaseQuery({ 
@@ -29,7 +33,14 @@ export const personsApi = createApi({
       }),
       invalidatesTags: ['Persons'], // Invalidates cache when a person is deleted
     }),
+    deletePerson: builder.mutation<void, PersonId>({
+      query: ({ id }) => ({
+        url: `persons/delete/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Persons'],
+    }),
   }),
 });
 
-export const { useGetPersonsQuery, useAddPersonMutation } = personsApi;
+export const { useGetPersonsQuery, useAddPersonMutation, useDeletePersonMutation } = personsApi;
