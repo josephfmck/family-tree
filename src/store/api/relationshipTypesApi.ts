@@ -7,12 +7,27 @@ interface RelationshipType {
 
 export const relationshipTypesApi = createApi({
   reducerPath: 'relationshipTypesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: '/api/',
+    prepareHeaders: (headers) => {
+      headers.set('Cache-Control', 'no-store');
+      return headers;
+    },   
+  }),
+  tagTypes: ['RelationshipTypes'],
   endpoints: (builder) => ({
     getRelationshipTypes: builder.query<RelationshipType[], void>({
       query: () => 'relationship-types/read',
     }),
+    addRelationshipType: builder.mutation({
+      query: (body) => ({
+        url: 'relationshipTypes/create',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['RelationshipTypes'], // Invalidates cache when a person is deleted
+    }),
   }),
 });
 
-export const { useGetRelationshipTypesQuery } = relationshipTypesApi;
+export const { useGetRelationshipTypesQuery, useAddRelationshipTypeMutation } = relationshipTypesApi;

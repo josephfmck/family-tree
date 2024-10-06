@@ -47,6 +47,8 @@ export default function PersonForm() {
     };
   
   return (
+    <>
+    <h1>Add Person</h1>
     <form onSubmit={handleSubmit}>
         <label htmlFor="fname">First Name:</label><br />
         <input
@@ -70,5 +72,6 @@ export default function PersonForm() {
 
         <button type="submit">Submit</button>
     </form>
+    </>
   );
 }

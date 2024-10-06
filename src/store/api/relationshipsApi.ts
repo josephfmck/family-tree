@@ -11,10 +11,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 // }
 
 // ! back end ids for unique sql relationships
+// ! 1. pulling from the db using the route.
 interface RelationshipIds {
-  person1Id: string;
-  person2Id: string;
-  relationshipTypeId: string;
+  person_id_1: string;
+  person_id_2: string;
+  relationship_type_id: string;
 }
 
 //! BACKEND

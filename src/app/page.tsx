@@ -13,6 +13,9 @@ import RelationshipsList from '../components/RelationshipsList';
 import { useGetRelationshipsQuery } from '@/store/api/relationshipsApi';
 import { setRelationships } from '@/store/slices/relationshipsSlice';
 import PersonForm from '@/components/PersonForm';
+import RelationshipTypes from '@/components/RelationshipTypesList';
+import RelationshipTypesList from '@/components/RelationshipTypesList';
+import RelationshipTypesForm from '@/components/RelationshipTypesForm';
 // TODO: fetch all 3 on page load. 
 // TODO: set relationships rtk to the fetched relationships 
 
@@ -30,8 +33,14 @@ export default function Home() {
     <div>
 
     {/* // TODO: RTK for relationships, when adding a new relationship with <RelationshipForm>. repull and set the relationships rtk which is then rendered out in <relationships> */}
-    <RelationshipsList/>
-    <RelationshipForm />
+    <div style={{ display: "flex" }}>
+      <RelationshipForm />
+      <RelationshipsList/>
+    </div>
+    <div style={{ display: "flex" }}>
+    <RelationshipTypesForm />
+    <RelationshipTypesList />
+    </div>
     <PersonForm />
     <People />
   </div>

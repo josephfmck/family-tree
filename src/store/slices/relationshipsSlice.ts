@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+// ! 2. is set to rtk after pulled from api rtk query 
 interface RelationshipIds {
-  person1Id: string;
-  person2Id: string;
-  relationshipTypeId: string;
+  person_id_1: string;
+  person_id_2: string;
+  relationship_type_id: string;
 }
 
 

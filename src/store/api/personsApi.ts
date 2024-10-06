@@ -8,10 +8,16 @@ interface Person {
 
 export const personsApi = createApi({
   reducerPath: 'personsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: '/api/',
+    prepareHeaders: (headers) => {
+      headers.set('Cache-Control', 'no-store');
+      return headers;
+    },  
+  }),
   tagTypes: ['Persons'],
   endpoints: (builder) => ({
-    getPersons: builder.query({
+    getPersons: builder.query<Person[], void>({
       query: () => 'persons/read',
       providesTags: ['Persons'], // Provides this tag to the cache
     }),
