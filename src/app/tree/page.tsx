@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import FamilyTree from '@/components/Tree'; // Adjust the path as needed
+import FamilyTree from '@/components/tree/FamilyTree'; // Adjust the path as needed
 import { useAppData } from '@/hooks/useAppData';
 
 export default function TreePage() {

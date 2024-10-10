@@ -9,6 +9,7 @@ export default function RelationshipForm() {
     const dispatch = useDispatch();
     const relationshipTypes = useSelector((state: RootState) => state.relationshipTypes);
     const persons = useSelector((state: RootState) => state.persons);
+    const relationships = useSelector((state: RootState) => state.relationships);
     // api method 
     const [addRelationship, { isLoading }] = useAddRelationshipMutation();
 
@@ -40,6 +41,80 @@ export default function RelationshipForm() {
       }
     };
 
+    // Helper function to add grandparent or grandchild relationships
+    const addGrandparentOrGrandchildRelationships = async (
+      person1: string,
+      person2: string,
+      relationshipType: string,
+      relationships: any[],
+      relationshipTypes: any[],
+      addRelationship: any
+    ) => {
+      if (relationshipType === 'Parent') {
+        // Check if person2 is a parent to anyone else (i.e., if they are a parent of person3)
+        const childRelationships = relationships.filter(
+          (rel: any) =>
+            rel.person_id_1 === person2 &&
+            relationshipTypes.find((type: any) => type.id === rel.relationship_type_id)?.relationship === 'Parent'
+        );
+        console.log(childRelationships);
+
+        // If person2 has any children, person1 is their grandparent
+        for (const childRel of childRelationships) {
+          const grandchildId = childRel.person_id_2;
+
+          console.log(grandchildId);
+
+          // Add grandparent relationship between person1 and grandchildId
+          const grandparentRelationshipType = relationshipTypes.find(
+            (type: any) => type.relationship === 'Grandparent'
+          );
+          console.log(grandparentRelationshipType);
+
+          if (grandparentRelationshipType) {
+            console.log(person1, grandchildId, grandparentRelationshipType.id);
+            await addRelationship({
+              person_id_1: person1,
+              person_id_2: grandchildId,
+              relationship_type_id: grandparentRelationshipType.id,
+            }).unwrap();
+
+            // Add reciprocal "Grandchild" relationship
+            await addReciprocalRelationship('Grandchild', grandchildId, person1);
+          }
+        }
+      } else if (relationshipType === 'Child') {
+        // Check if person2 has a parent (i.e., if they are a child of person3)
+        const parentRelationships = relationships.filter(
+          (rel: any) =>
+            rel.person_id_2 === person2 &&
+            relationshipTypes.find((type: any) => type.id === rel.relationship_type_id)?.relationship === 'Parent'
+        );
+
+        // If person2 has a parent, person1 is their grandchild
+        for (const parentRel of parentRelationships) {
+          const grandparentId = parentRel.person_id_1;
+
+          // Add grandchild relationship between person1 and grandparentId
+          const grandchildRelationshipType = relationshipTypes.find(
+            (type: any) => type.relationship === 'Grandchild'
+          );
+
+          if (grandchildRelationshipType) {
+            await addRelationship({
+              person_id_1: grandparentId,
+              person_id_2: person1,
+              relationship_type_id: grandchildRelationshipType.id,
+            }).unwrap();
+
+            // Add reciprocal "Grandparent" relationship
+            await addReciprocalRelationship('Grandparent', person1, grandparentId);
+          }
+        }
+      }
+    };
+
+
     // ! Create relationship with IDs
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -64,11 +139,21 @@ export default function RelationshipForm() {
        if (selectedRelationshipType) {
         const relationshipType = selectedRelationshipType.relationship;
 
-        // TODO: more - spouse, 
+        //! child - parent
         if (relationshipType === 'Child') {
+
+          // ! child - add parent
           await addReciprocalRelationship('Parent', person2, person1);
+          
+          // ! Add grandparent relationships if applicable
+          await addGrandparentOrGrandchildRelationships(person1, person2, 'Child', relationships, relationshipTypes, addRelationship);
         } else if (relationshipType === 'Parent') {
+
+          // ! parent - Add child
           await addReciprocalRelationship('Child', person2, person1);
+
+          // ! Add GrandChild relationships if applicable
+          await addGrandparentOrGrandchildRelationships(person1, person2, 'Parent', relationships, relationshipTypes, addRelationship);
         } else if (relationshipType === 'Sibling') {
           await addReciprocalRelationship('Sibling', person2, person1);
         } else if (relationshipType === 'Spouse') {

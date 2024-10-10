@@ -8,23 +8,25 @@ export default function RelationshipTypes() {
     // ? should already be set from the first fetch and set of state in page.tsx
     // const relationshipTypes = useSelector((state: RootState) => state.relationshipTypes);
 
-    const { data: relationshipTypes, error, isLoading } = useGetRelationshipTypesQuery();
+    const relationshipTypes = useSelector((state: RootState) => state.relationshipTypes);
+
+    // const { data: relationshipTypes, error, isLoading } = useGetRelationshipTypesQuery();
     
-    useEffect(() => {
-        console.log('RelationshipTypes fetched:', relationshipTypes); // Debugging output
-    }, [relationshipTypes]);
+    // useEffect(() => {
+    //     console.log('RelationshipTypes fetched:', relationshipTypes); // Debugging output
+    // }, [relationshipTypes]);
 
-    if (isLoading) {
-        return <p>Loading relationshipTypes...</p>;
-    }
+    // if (isLoading) {
+    //     return <p>Loading relationshipTypes...</p>;
+    // }
 
-    if (error) {
-        return <p>Error fetching relationshipTypes.</p>;
-    }
+    // if (error) {
+    //     return <p>Error fetching relationshipTypes.</p>;
+    // }
 
-    if (!relationshipTypes || relationshipTypes.length === 0) {
-        return <p>No relationshipTypes found.</p>;
-    }
+    // if (!relationshipTypes || relationshipTypes.length === 0) {
+    //     return <p>No relationshipTypes found.</p>;
+    // }
 
     return (
         <ul>

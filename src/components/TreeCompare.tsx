@@ -3,6 +3,8 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3'; // D3.js library
 import { nodes as importedNodes, links as importedLinks } from '@/data/data'; // Import data
+import { RootState } from '@/store/store';
+import { useSelector } from 'react-redux';
 
 // Define the Node interface
 interface Node {
@@ -22,6 +24,11 @@ interface Link {
 
 const FamilyTree = () => {
   const svgRef = useRef<SVGSVGElement | null>(null); // Reference to the SVG element
+  // Fetch persons and relationships from Redux store
+  const persons = useSelector((state: RootState) => state.persons);
+  const relationships = useSelector((state: RootState) => state.relationships);
+  const relationshipTypes = useSelector((state: RootState) => state.relationshipTypes);
+  
 
   useEffect(() => {
     const svgElement = svgRef.current;
@@ -176,31 +183,15 @@ const FamilyTree = () => {
         .y((d) => d.y);
 
       // Draw links
-      const link = d3
-        .select(svgElement)
-        .append('g')
-        .attr('class', 'links')
-        .selectAll('path')
-        .data(links)
-        .enter()
-        .append('path')
+      const link = d3.select(svgElement).append('g').attr('class', 'links').selectAll('path').data(links).enter().append('path')
         .attr('d', (d) => {
           const source = 'x' in d.source ? d.source : d.source as Node;
           const target = d.target;
           return linkGenerator({ source, target });
-        })
-        .attr('stroke-width', 2)
-        .attr('stroke', (d: Link) => colorScale(d.relationship))
-        .attr('fill', 'none');
+        }).attr('stroke-width', 2).attr('stroke', (d: Link) => colorScale(d.relationship)).attr('fill', 'none');
 
       // Add relationship labels
-      d3.select(svgElement)
-        .append('g')
-        .attr('class', 'labels')
-        .selectAll('text')
-        .data(links)
-        .enter()
-        .append('text')
+      d3.select(svgElement).append('g').attr('class', 'labels').selectAll('text').data(links).enter().append('text')
         .attr('x', (d: Link) => {
           const sourceX = 'x' in d.source ? d.source.x : (d.source as Node).x;
           const targetX = d.target.x;
@@ -210,42 +201,13 @@ const FamilyTree = () => {
           const sourceY = 'y' in d.source ? d.source.y : (d.source as Node).y;
           const targetY = d.target.y;
           return (sourceY + targetY) / 2;
-        })
-        .attr('text-anchor', 'middle')
-        .attr('dy', '-0.35em')
-        .attr('fill', 'white')
-        .text((d: Link) => d.relationship);
+        }).attr('text-anchor', 'middle').attr('dy', '-0.35em').attr('fill', 'white').text((d: Link) => d.relationship);
 
       // Draw person nodes
-      d3.select(svgElement)
-        .append('g')
-        .attr('class', 'nodes')
-        .selectAll('circle')
-        .data(nodes)
-        .enter()
-        .append('circle')
-        .attr('cx', (d: Node) => d.x)
-        .attr('cy', (d: Node) => d.y)
-        .attr('r', 25)
-        .attr('fill', '#69b3a2')
-        .attr('stroke', '#ffffff')
-        .attr('stroke-width', 1.5);
+      d3.select(svgElement).append('g').attr('class', 'nodes').selectAll('circle').data(nodes).enter().append('circle').attr('cx', (d: Node) => d.x).attr('cy', (d: Node) => d.y).attr('r', 25).attr('fill', '#69b3a2').attr('stroke', '#ffffff').attr('stroke-width', 1.5);
 
       // Add labels for person nodes
-      d3.select(svgElement)
-        .append('g')
-        .attr('class', 'labels')
-        .selectAll('text.name')
-        .data(nodes)
-        .enter()
-        .append('text')
-        .attr('class', 'name')
-        .attr('x', (d: Node) => d.x)
-        .attr('y', (d: Node) => d.y - 35)
-        .attr('text-anchor', 'middle')
-        .attr('dy', '.35em')
-        .attr('fill', 'white')
-        .text((d: Node) => d.name);
+      d3.select(svgElement).append('g').attr('class', 'labels').selectAll('text.name').data(nodes).enter().append('text').attr('class', 'name').attr('x', (d: Node) => d.x).attr('y', (d: Node) => d.y - 35).attr('text-anchor', 'middle').attr('dy', '.35em').attr('fill', 'white').text((d: Node) => d.name);
 
       // Tooltip interactions
       link

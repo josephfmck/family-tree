@@ -8,6 +8,8 @@ export default function Relationships() {
     // ? should already be set from the first fetch and set of state in page.tsx
     // const relationshipNames = useSelector((state: RootState) => state.relationshipNames);
 
+
+
     const { data: relationshipNames, error, isLoading } = useGetRelationshipNamesQuery();
     
     useEffect(() => {
